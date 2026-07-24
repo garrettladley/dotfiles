@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: macos-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: check out repository
+        uses: actions/checkout@v6
+
+      - name: install toolchain
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew bundle --file Brewfile --no-upgrade
+
+      - name: run checks
+        run: just ci
