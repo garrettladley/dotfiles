@@ -28,7 +28,7 @@ while IFS= read -r link; do
 done < <(find "$installed_home" -type l)
 
 expected_link_count="$(
-  find "$repo_root/fish" "$repo_root/ghostty" -type f | wc -l
+  find "$repo_root/fish" "$repo_root/ghostty" "$repo_root/zed" -type f | wc -l
 )"
 for skill in "$repo_root/skills"/*; do
   [[ -d "$skill" ]] || continue

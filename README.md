@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS configuration for Git, Fish, Ghostty, and agent skills.
+Personal macOS configuration for Git, Fish, Ghostty, Zed, and agent skills.
 
 ## Install
 
@@ -37,11 +37,11 @@ Store Fish secrets in `~/.config/fish/secrets.fish`.
 
 ## Managed files
 
-Files under `fish/` and `ghostty/` mirror their respective configuration
-directories and are discovered automatically. Each directory under `skills/`
-is linked into both supported agent skill directories. Adding a Fish function,
-Ghostty setting file, or personal skill does not require registering individual
-files with the installer.
+Files under `fish/`, `ghostty/`, and `zed/` mirror their respective
+configuration directories and are discovered automatically. Each directory
+under `skills/` is linked into both supported agent skill directories. Adding a
+Fish function, application setting, or personal skill does not require
+registering individual files with the installer.
 
 ## Development
 
