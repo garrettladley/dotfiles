@@ -1,0 +1,99 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "cli_default_open_behavior": "new_window",
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry",
+    },
+  },
+  "code_lens": "on",
+  "outline_panel": {
+    "dock": "left",
+  },
+  "collaboration_panel": {
+    "dock": "left",
+  },
+  "excerpt_context_lines": 5,
+  "expand_excerpt_lines": 10,
+  "buffer_font_family": ".ZedMono",
+  "git_panel": {
+    "dock": "left",
+    "tree_view": true,
+  },
+  "redact_private_values": true,
+  "colorize_brackets": true,
+  "show_signature_help_after_edits": true,
+  "auto_signature_help": true,
+  "file_finder": {
+    "modal_max_width": "small",
+  },
+  "preview_tabs": {
+    "enable_preview_from_file_finder": true,
+    "enable_preview_multibuffer_from_code_navigation": true,
+    "enabled": true,
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+  },
+  "title_bar": {
+    "show_menus": false,
+  },
+  "project_panel": {
+    "dock": "left",
+    "scrollbar": {
+      "show": "never",
+    },
+  },
+  "agent": {
+    "dock": "right",
+    "play_sound_when_agent_done": "always",
+    "notify_when_agent_waiting": "all_screens",
+    "model_parameters": [],
+  },
+  "terminal": {
+    "shell": {
+      "program": "fish",
+    },
+  },
+  "snippet_sort_order": "top",
+  "theme": "One Dark",
+  "format_on_save": "on",
+  "languages": {
+    "Go": {
+      "show_edit_predictions": true,
+    },
+    "Python": {
+      "language_servers": ["pyright", "ruff"],
+    },
+  },
+  "lsp": {
+    "gopls": {
+      "initialization_options": {
+        "hints": {
+          "assignVariableTypes": true,
+          "compositeLiteralFields": true,
+          "compositeLiteralTypes": true,
+          "constantValues": true,
+          "functionTypeParameters": true,
+          "parameterNames": true,
+          "rangeVariableTypes": true,
+        },
+      },
+    },
+  },
+  "show_edit_predictions": true,
+  "telemetry": {
+    "metrics": false,
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "semantic_tokens": "combined",
+}

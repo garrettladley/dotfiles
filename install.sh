@@ -76,6 +76,7 @@ discover_tree "${repo_root}/fish" "${HOME}/.config/fish"
 discover_tree \
   "${repo_root}/ghostty" \
   "${HOME}/Library/Application Support/com.mitchellh.ghostty"
+discover_tree "${repo_root}/zed" "${HOME}/.config/zed"
 discover_skills
 
 link_target() {
