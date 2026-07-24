@@ -1,4 +1,5 @@
 brew "bat"
+brew "biome"
 brew "difftastic"
 brew "fish"
 brew "fzf"
