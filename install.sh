@@ -45,6 +45,7 @@ while (($# > 0)); do
 done
 
 links=()
+links+=(".hushlogin|${HOME}/.hushlogin")
 
 discover_tree() {
   local source_root=$1

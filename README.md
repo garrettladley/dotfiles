@@ -43,6 +43,9 @@ under `skills/` is linked into both supported agent skill directories. Adding a
 Fish function, application setting, or personal skill does not require
 registering individual files with the installer.
 
+`.hushlogin` is linked to the home directory to suppress macOS login banners,
+including the "Last login" message shown when opening a terminal.
+
 ## Development
 
 ```console
