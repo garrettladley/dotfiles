@@ -1,5 +1,5 @@
 function fish_prompt
-    set -l cwd_abbr (string replace -r "^$HOME/[Dd]esktop/code/" "" "$PWD")
+    set -l cwd_abbr (string replace -r "^$HOME/(?:[Dd]esktop/code|dev)/" "" "$PWD")
     echo -n (set_color blue)"$cwd_abbr "(set_color normal)
 
     if git rev-parse --is-inside-work-tree >/dev/null 2>&1
