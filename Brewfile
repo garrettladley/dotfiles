@@ -1,5 +1,6 @@
 brew "bat"
 brew "biome"
+cask "codex"
 brew "difftastic"
 brew "fish"
 brew "fzf"
