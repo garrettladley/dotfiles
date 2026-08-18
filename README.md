@@ -15,8 +15,18 @@ The installer checks every managed target before changing anything. If an
 existing file or an unexpected symlink would be replaced, installation stops
 and reports all conflicts. It never deletes, moves, or overwrites them.
 
-Use `--skip-brew` to install configuration without satisfying the `Brewfile`.
+Use `--skip-brew` to install configuration without satisfying the `Brewfile`,
+or `--skip-macos` to leave managed macOS preferences unchanged.
 Use `--check` to verify an existing installation.
+
+## macOS preferences
+
+The installer applies the macOS preferences in `macos/defaults.sh` on macOS.
+See that script for the managed settings. Use `./install.sh --skip-macos` to
+omit this step, including while testing the installer.
+
+The installer prints a reminder to log out and back in, or restart, if macOS
+does not immediately recognize one of these preference changes.
 
 Git credentials and Fish secrets remain machine-local. Authenticate GitHub
 separately with:

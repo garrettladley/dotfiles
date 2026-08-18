@@ -11,7 +11,7 @@ mkdir -p "$installed_home"
 printf '[alias]\n\tlocal = status\n' >"${installed_home}/.gitconfig"
 
 HOME="$installed_home" GIT_CONFIG_NOSYSTEM=1 \
-  "$repo_root/install.sh" --skip-brew >"${test_root}/first-install.log"
+  "$repo_root/install.sh" --skip-brew --skip-macos >"${test_root}/first-install.log"
 
 HOME="$installed_home" GIT_CONFIG_NOSYSTEM=1 \
   git config --global --get-all include.path |
@@ -38,7 +38,7 @@ done
 
 first_config="$(cksum <"${installed_home}/.gitconfig")"
 HOME="$installed_home" GIT_CONFIG_NOSYSTEM=1 \
-  "$repo_root/install.sh" --skip-brew >"${test_root}/second-install.log"
+  "$repo_root/install.sh" --skip-brew --skip-macos >"${test_root}/second-install.log"
 second_config="$(cksum <"${installed_home}/.gitconfig")"
 [[ "$first_config" == "$second_config" ]]
 [[ ! -s "${test_root}/second-install.log" ]]
@@ -49,7 +49,7 @@ printf 'local config\n' >"${conflict_home}/.config/fish/config.fish"
 find "$conflict_home" -print | sort >"${test_root}/before-conflict"
 
 if HOME="$conflict_home" GIT_CONFIG_NOSYSTEM=1 \
-  "$repo_root/install.sh" --skip-brew 2>"${test_root}/conflict.log"; then
+  "$repo_root/install.sh" --skip-brew --skip-macos 2>"${test_root}/conflict.log"; then
   printf 'expected conflicting installation to fail\n' >&2
   exit 1
 fi

@@ -1,6 +1,6 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-shell_files := "install.sh tests/install.sh"
+shell_files := "install.sh macos/defaults.sh tests/install.sh"
 fish_files := "fish/config.fish fish/functions/*.fish"
 jsonc_files := "zed/settings.json"
 

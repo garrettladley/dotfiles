@@ -5,18 +5,21 @@ set -euo pipefail
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 brewfile="${repo_root}/Brewfile"
 git_config="${repo_root}/git/config"
+macos_defaults="${repo_root}/macos/defaults.sh"
 
 dry_run=false
 check_only=false
 skip_brew=false
+skip_macos=false
 
 usage() {
   cat <<'EOF'
-Usage: ./install.sh [--check] [--dry-run] [--skip-brew]
+Usage: ./install.sh [--check] [--dry-run] [--skip-brew] [--skip-macos]
 
   --check       Verify the current installation without changing it.
   --dry-run     Print the changes that would be made.
   --skip-brew   Do not install packages from the Brewfile.
+  --skip-macos  Do not apply managed macOS preferences.
 EOF
 }
 
@@ -30,6 +33,9 @@ while (($# > 0)); do
       ;;
     --skip-brew)
       skip_brew=true
+      ;;
+    --skip-macos)
+      skip_macos=true
       ;;
     -h | --help)
       usage
@@ -108,6 +114,17 @@ has_git_include() {
   return 1
 }
 
+is_macos() {
+  [[ "$(uname -s)" == "Darwin" ]]
+}
+
+has_expected_macos_defaults() {
+  [[ "$(defaults read com.apple.screencapture target 2>/dev/null)" == "clipboard" ]] &&
+    [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == "10" ]] &&
+    [[ "$(defaults read -g KeyRepeat 2>/dev/null)" == "1" ]] &&
+    [[ "$(defaults read -g com.apple.trackpad.scaling 2>/dev/null)" == "3" ]]
+}
+
 preflight_links() {
   local conflict_count=0
   local entry
@@ -165,6 +182,11 @@ check_installation() {
     failed=true
   fi
 
+  if [[ "$skip_macos" == false ]] && is_macos && ! has_expected_macos_defaults; then
+    printf 'check: managed macOS preferences do not match\n' >&2
+    failed=true
+  fi
+
   for command_name in "${required_commands[@]}"; do
     if ! command -v "$command_name" >/dev/null 2>&1; then
       printf 'check: missing command: %s\n' "$command_name" >&2
@@ -200,6 +222,9 @@ if [[ "$dry_run" == true ]]; then
   if [[ "$skip_brew" == false ]]; then
     printf 'brew bundle: %s\n' "$brewfile"
   fi
+  if [[ "$skip_macos" == false ]] && is_macos; then
+    printf 'macOS defaults: %s\n' "$macos_defaults"
+  fi
   exit
 fi
 
@@ -211,6 +236,10 @@ if [[ "$skip_brew" == false ]]; then
 
   brew bundle check --file="$brewfile" >/dev/null 2>&1 ||
     brew bundle --file="$brewfile"
+fi
+
+if [[ "$skip_macos" == false ]] && is_macos; then
+  "$macos_defaults"
 fi
 
 for entry in "${links[@]}"; do
