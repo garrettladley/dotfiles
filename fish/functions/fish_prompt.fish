@@ -1,5 +1,21 @@
 function fish_prompt
-    set -l cwd_abbr (string replace -r "^$HOME/(?:[Dd]esktop/code|dev)/" "" "$PWD")
+    set -l cwd_abbr "$PWD"
+    set -l project_roots "$HOME/Desktop/code" "$HOME/desktop/code" "$HOME/dev"
+
+    if set -q FISH_PROMPT_PROJECT_ROOTS
+        set -a project_roots $FISH_PROMPT_PROJECT_ROOTS
+    end
+
+    for root in $project_roots
+        set -l root_regex (string escape --style=regex -- (string trim --right --chars=/ "$root"))
+        set -l collapsed (string replace --regex "^$root_regex/" "" -- "$PWD")
+
+        if test "$collapsed" != "$PWD"
+            set cwd_abbr "$collapsed"
+            break
+        end
+    end
+
     echo -n (set_color blue)"$cwd_abbr "(set_color normal)
 
     if git rev-parse --is-inside-work-tree >/dev/null 2>&1
