@@ -1,4 +1,7 @@
 function dd --description 'Show the merge-base diff with delta'
+    set -l GIT_PAGER
+    set -l PAGER
+
     set -l default_branch (git symbolic-ref --quiet --short refs/remotes/origin/HEAD)
     or begin
         echo "dd: unable to determine origin's default branch; run 'git remote set-head origin --auto'." >&2
