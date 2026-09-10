@@ -19,7 +19,7 @@ Usage: ./install.sh [--check] [--dry-run] [--skip-brew] [--skip-macos]
   --check       Verify the current installation without changing it.
   --dry-run     Print the changes that would be made.
   --skip-brew   Do not install packages from the Brewfile.
-  --skip-macos  Do not apply managed macOS preferences.
+  --skip-macos  Do not apply managed macOS settings.
 EOF
 }
 
@@ -118,6 +118,43 @@ is_macos() {
   [[ "$(uname -s)" == "Darwin" ]]
 }
 
+macos_login_shell() {
+  local user_name
+
+  user_name="$(id -un)"
+  id -P "$user_name" | awk -F: '{ print $10 }'
+}
+
+has_expected_macos_login_shell() {
+  local fish_path
+
+  fish_path="$(command -v fish 2>/dev/null)" || return 1
+
+  grep -Fqx -- "$fish_path" /etc/shells &&
+    [[ "$(macos_login_shell)" == "$fish_path" ]]
+}
+
+configure_macos_login_shell() {
+  local current_shell
+  local fish_path
+
+  if ! fish_path="$(command -v fish 2>/dev/null)"; then
+    printf 'install: Fish must be installed before configuring the login shell\n' >&2
+    return 1
+  fi
+
+  if ! grep -Fqx -- "$fish_path" /etc/shells; then
+    printf 'registering login shell: %s\n' "$fish_path"
+    printf '%s\n' "$fish_path" | sudo tee -a /etc/shells >/dev/null
+  fi
+
+  current_shell="$(macos_login_shell)"
+  if [[ "$current_shell" != "$fish_path" ]]; then
+    chsh -s "$fish_path"
+    printf 'configured login shell: %s\n' "$fish_path"
+  fi
+}
+
 has_expected_macos_defaults() {
   [[ "$(defaults read com.apple.screencapture target 2>/dev/null)" == "clipboard" ]] &&
     [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == "10" ]] &&
@@ -187,6 +224,12 @@ check_installation() {
     failed=true
   fi
 
+  if [[ "$skip_macos" == false ]] && is_macos &&
+    ! has_expected_macos_login_shell; then
+    printf 'check: Fish is not configured as the macOS login shell\n' >&2
+    failed=true
+  fi
+
   for command_name in "${required_commands[@]}"; do
     if ! command -v "$command_name" >/dev/null 2>&1; then
       printf 'check: missing command: %s\n' "$command_name" >&2
@@ -223,6 +266,7 @@ if [[ "$dry_run" == true ]]; then
     printf 'brew bundle: %s\n' "$brewfile"
   fi
   if [[ "$skip_macos" == false ]] && is_macos; then
+    printf 'macOS login shell: register and select Homebrew Fish\n'
     printf 'macOS defaults: %s\n' "$macos_defaults"
   fi
   exit
@@ -239,6 +283,7 @@ if [[ "$skip_brew" == false ]]; then
 fi
 
 if [[ "$skip_macos" == false ]] && is_macos; then
+  configure_macos_login_shell
   "$macos_defaults"
 fi
 

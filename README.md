@@ -16,17 +16,23 @@ existing file or an unexpected symlink would be replaced, installation stops
 and reports all conflicts. It never deletes, moves, or overwrites them.
 
 Use `--skip-brew` to install configuration without satisfying the `Brewfile`,
-or `--skip-macos` to leave managed macOS preferences unchanged.
+or `--skip-macos` to leave managed macOS preferences and the login shell
+unchanged.
 Use `--check` to verify an existing installation.
 
 ## macOS preferences
 
 The installer applies the macOS preferences in `macos/defaults.sh` on macOS.
 See that script for the managed settings. Use `./install.sh --skip-macos` to
-omit this step, including while testing the installer.
+omit these settings, including while testing the installer.
 
-The installer prints a reminder to log out and back in, or restart, if macOS
-does not immediately recognize one of these preference changes.
+The installer also registers the Homebrew-installed Fish executable in
+`/etc/shells` and selects it as the current user's macOS login shell. Registering
+Fish may prompt for an administrator password. Ghostty inherits this login shell
+instead of naming Fish in its own configuration.
+
+Log out and back in, or restart, if macOS does not immediately recognize a
+login-shell or preference change.
 
 Git credentials and Fish secrets remain machine-local. Authenticate GitHub
 separately with:
