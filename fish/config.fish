@@ -10,6 +10,9 @@ if test -f "$HOME/.config/fish/secrets.fish"
     source "$HOME/.config/fish/secrets.fish"
 end
 
+# Keep terminal applications from inheriting monochrome output mode.
+set -e NO_COLOR
+
 if status is-interactive
     set -g fish_greeting
 
