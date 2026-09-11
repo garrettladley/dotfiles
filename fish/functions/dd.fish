@@ -1,6 +1,7 @@
 function dd --description 'Show the merge-base diff with delta'
     set -l GIT_PAGER
     set -l PAGER
+    set -l NO_COLOR
 
     set -l default_branch (git symbolic-ref --quiet --short refs/remotes/origin/HEAD)
     or begin
