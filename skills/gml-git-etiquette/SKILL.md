@@ -30,6 +30,9 @@ The body is a holistic three-to-five-item bullet list:
 - rewrite the complete description when the branch changes instead of appending
   individual commit summaries
 
+When the body benefits from a structural visualization, follow
+`gml-ascii-diagrams`.
+
 ## Branches
 
 Prefix branch names with `gml/` and use kebab-case:
