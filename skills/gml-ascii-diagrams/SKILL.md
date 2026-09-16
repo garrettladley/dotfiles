@@ -1,9 +1,9 @@
 ---
 name: gml-ascii-diagrams
-description: Call-graph-style text diagrams for pull requests and agent sessions. Use when visualizing execution paths, nested structures, branching behavior, filtering, or test cases.
+description: Call-graph-style text diagrams. Use when visualizing execution paths, nested structures, branching behavior, filtering, or test cases.
 ---
 
-Text diagram standards for pull requests and agent sessions.
+Text diagram standards.
 
 ## Diagrams
 
@@ -27,15 +27,7 @@ get_capabilities(filter_enabled=true)
 - prefer one complete tree over multiple fragments
 - do not use Mermaid, decorative boxes, arrows, or emoji
 
-## Pull Requests
-
-Place the diagram before the bullet list when it summarizes the whole change.
-Nest it beneath a bullet when it supports only that item.
-
-Follow `gml-git-etiquette` for the surrounding description. Use the prose to
-explain implications and verification instead of restating the tree.
-
-## Agent Sessions
+## Usage
 
 Use a diagram when hierarchy or branching is easier to understand visually.
 Introduce it with at most one sentence, then explain only details that are not
