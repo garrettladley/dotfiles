@@ -1,13 +1,27 @@
 ---
 name: gml-ascii-diagrams
-description: Call-graph-style text diagrams. Use when visualizing execution paths, nested structures, branching behavior, filtering, or test cases.
+description: Text diagrams for architecture, data flow, lifecycles, execution paths, hierarchies, branching behavior, filtering, or test cases.
 ---
 
 Text diagram standards.
 
 ## Diagrams
 
-Use a fenced `text` block with a single rooted tree:
+Use a fenced `text` block. Choose the form that makes the important relationship
+easiest to understand; a diagram does not need to be a tree or have a single
+root.
+
+Useful forms include, but are not limited to:
+
+- rooted trees for call graphs, nested structures, and branching behavior
+- boxes and labeled arrows for architecture, ownership, and data flow
+- timelines or sequences for interactions that unfold over time
+- state-transition diagrams for lifecycle behavior
+- multiple small, labeled views when distinct concerns would be crowded into one
+  diagram
+- hybrids of these forms when the subject crosses boundaries
+
+A compact tree remains a good option when the subject is actually hierarchical:
 
 ```text
 get_capabilities(filter_enabled=true)
@@ -18,17 +32,18 @@ get_capabilities(filter_enabled=true)
         └── result: prune
 ```
 
-- start with the entrypoint, subject, or scenario
-- use `├──`, `└──`, and `│` to express hierarchy
+- make the main subject, entrypoint, or direction of flow apparent
+- use line-drawing characters, arrows, boxes, spacing, and labels wherever they
+  carry meaning
 - use code identifiers directly without Markdown backticks
-- include arguments only when they explain a branch
-- describe observable outcomes with `result:` leaves
-- omit incidental calls and repeated paths
-- prefer one complete tree over multiple fragments
-- do not use Mermaid, decorative boxes, arrows, or emoji
+- include arguments, payloads, transitions, and outcomes only when they clarify
+  the behavior being explained
+- omit incidental detail and repeated paths
+- prefer a readable overview over rigid adherence to one visual grammar
+- do not use Mermaid or decorative elements that do not communicate structure
 
 ## Usage
 
-Use a diagram when hierarchy or branching is easier to understand visually.
-Introduce it with at most one sentence, then explain only details that are not
-visible in the tree.
+Use a diagram when relationships or behavior are easier to understand visually.
+Briefly introduce it when the context is not already clear, then explain only
+details that are not visible in the diagram.
