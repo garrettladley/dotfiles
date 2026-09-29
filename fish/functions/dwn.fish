@@ -6,7 +6,7 @@ function dwn --description 'Copy the most recently added download path'
     end
 
     if not command ls -A "$downloads" >/dev/null 2>&1
-        echo "dwn: cannot access $downloads; allow your terminal app to access Downloads in System Settings > Privacy & Security > Files & Folders" >&2
+        echo "dwn: macOS denied access to $downloads; check your terminal app's permissions under System Settings > Privacy & Security > Files & Folders or Full Disk Access" >&2
         return 1
     end
 
