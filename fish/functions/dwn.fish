@@ -5,18 +5,41 @@ function dwn --description 'Copy the most recently added download path'
         return 1
     end
 
-    set -l latest_record (
-        find "$downloads" -type f -exec stat -f '%B %N' {} + |
-            sort -nr |
-            head -n 1
-    )
+    if not command ls -A "$downloads" >/dev/null 2>&1
+        echo "dwn: cannot access $downloads; allow your terminal app to access Downloads in System Settings > Privacy & Security > Files & Folders" >&2
+        return 1
+    end
 
-    if test -z "$latest_record"
+    set -l latest_path
+    set -l latest_time
+
+    for path in (find "$downloads" -type f -print0 | string split0)
+        set -l added_at (stat -f '%B' "$path" 2>/dev/null)
+        if test -z "$added_at"
+            continue
+        end
+
+        if test "$added_at" -lt 0
+            set added_at (stat -f '%m' "$path" 2>/dev/null)
+        end
+        if test -z "$added_at"
+            continue
+        end
+
+        if test -z "$latest_path"
+            set latest_path "$path"
+            set latest_time "$added_at"
+        else if test "$added_at" -gt "$latest_time"
+            set latest_path "$path"
+            set latest_time "$added_at"
+        end
+    end
+
+    if test -z "$latest_path"
         echo "dwn: no files found in $downloads" >&2
         return 1
     end
 
-    set -l latest_path (string replace --regex '^-?[0-9]+ ' '' -- "$latest_record")
     printf '%s' "$latest_path" | pbcopy
     or return $status
 
