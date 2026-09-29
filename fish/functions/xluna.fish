@@ -3,6 +3,6 @@ function xluna --wraps=codex --description 'Run Codex with Luna and xhigh reason
     set -l reasoning_effort xhigh
     set -l NO_COLOR
 
-    command codex --model "$model" \
+    _codex_no_instructions --model "$model" \
         --config "model_reasoning_effort=\"$reasoning_effort\"" $argv
 end
