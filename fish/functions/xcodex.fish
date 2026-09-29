@@ -1,3 +1,6 @@
 function xcodex --wraps=codex --description 'Run Codex without project docs or skill instructions'
-    _codex_no_instructions $argv
+    codex \
+        --config project_doc_max_bytes=0 \
+        --config skills.include_instructions=false \
+        $argv
 end
