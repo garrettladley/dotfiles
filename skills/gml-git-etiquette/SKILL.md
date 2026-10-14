@@ -1,6 +1,9 @@
 ---
 name: gml-git-etiquette
-description: Git etiquette for commits and pull requests. Conventional Commits format, lowercase PR descriptions with backtick-wrapped code nouns, plain bullet-point bodies. Use when committing, making a PR, or shipping changes.
+description: >-
+  Git conventions for branch names, commit messages, and pull requests.
+  Use when creating a branch, committing changes, or drafting or updating
+  a PR title or description.
 ---
 
 Git etiquette standards for commits and pull requests.
