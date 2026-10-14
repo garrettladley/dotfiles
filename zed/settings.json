@@ -22,7 +22,7 @@
   },
   "excerpt_context_lines": 5,
   "expand_excerpt_lines": 10,
-  "buffer_font_family": ".ZedMono",
+  "buffer_font_family": "Lilex",
   "git_panel": {
     "dock": "left",
     "tree_view": true,
