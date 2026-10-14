@@ -1,6 +1,9 @@
 ---
 name: gml-ascii-diagrams
-description: Text diagrams for architecture, data flow, lifecycles, execution paths, hierarchies, branching behavior, filtering, or test cases.
+description: >-
+  Text diagram conventions for explaining structure and behavior.
+  Use when the user requests an ASCII or text diagram, or when a diagram
+  would clarify architecture, data flow, execution paths, or state transitions.
 ---
 
 Text diagram standards.
