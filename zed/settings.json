@@ -65,6 +65,7 @@
   },
   "snippet_sort_order": "top",
   "theme": "One Dark",
+  "soft_wrap": "editor_width",
   "format_on_save": "on",
   "languages": {
     "Go": {
