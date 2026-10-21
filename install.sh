@@ -51,7 +51,6 @@ while (($# > 0)); do
 done
 
 links=()
-links+=(".hushlogin|${HOME}/.hushlogin")
 
 discover_tree() {
   local source_root=$1
@@ -117,6 +116,10 @@ has_git_include() {
 is_macos() {
   [[ "$(uname -s)" == "Darwin" ]]
 }
+
+if is_macos; then
+  links+=("macos/.hushlogin|${HOME}/.hushlogin")
+fi
 
 macos_login_shell() {
   local user_name
