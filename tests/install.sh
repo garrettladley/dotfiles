@@ -34,6 +34,9 @@ for skill in "$repo_root/skills"/*; do
   [[ -d "$skill" ]] || continue
   ((expected_link_count += 2))
 done
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  ((expected_link_count += 1))
+fi
 [[ "$link_count" -eq "$expected_link_count" ]]
 
 first_config="$(cksum <"${installed_home}/.gitconfig")"
