@@ -44,6 +44,11 @@ if [[ "$dock_items" != "$expected_dock_items" ]]; then
   exit 1
 fi
 plutil -replace show-recents -bool false "$dock_plist"
+# Disable every hot corner in the staged Dock preferences before importing them.
+for corner in tl tr bl br; do
+  plutil -replace "wvous-${corner}-corner" -integer 0 "$dock_plist"
+  plutil -replace "wvous-${corner}-modifier" -integer 0 "$dock_plist"
+done
 plutil -lint "$dock_plist" >/dev/null
 
 # Keep screenshots in the clipboard by default. Hold Control while taking a
@@ -54,6 +59,15 @@ defaults write com.apple.screencapture target clipboard
 # restarting the Mac (or logging out and back in).
 defaults write -g InitialKeyRepeat -int 10
 defaults write -g KeyRepeat -int 1
+
+# Persist Caps Lock -> Control using the native Modifier Keys preference for
+# the built-in keyboard (vendor/product 0/0). Match the UI's Right Control value.
+# Unlike hidutil UserKeyMapping, this host-specific preference survives restart.
+defaults -currentHost write -g com.apple.keyboard.modifiermapping.0-0-0 -array \
+  '<dict><key>HIDKeyboardModifierMappingSrc</key><integer>30064771129</integer><key>HIDKeyboardModifierMappingDst</key><integer>30064771300</integer></dict>'
+
+# Use Celsius for temperature displays.
+defaults write -g AppleTemperatureUnit -string Celsius
 
 # Use the highest native trackpad tracking speed.
 defaults write -g com.apple.trackpad.scaling -float 3.0

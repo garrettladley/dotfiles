@@ -159,11 +159,26 @@ configure_macos_login_shell() {
 }
 
 has_expected_macos_defaults() {
+  local corner
+
   [[ "$(defaults read com.apple.screencapture target 2>/dev/null)" == "clipboard" ]] &&
     [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == "10" ]] &&
     [[ "$(defaults read -g KeyRepeat 2>/dev/null)" == "1" ]] &&
+    [[ "$(defaults read -g AppleTemperatureUnit 2>/dev/null)" == "Celsius" ]] &&
     [[ "$(defaults read -g com.apple.trackpad.scaling 2>/dev/null)" == "3" ]] &&
-    [[ "$(defaults read com.apple.dock show-recents 2>/dev/null)" == "0" ]]
+    [[ "$(defaults read com.apple.dock show-recents 2>/dev/null)" == "0" ]] || return 1
+
+  for corner in tl tr bl br; do
+    [[ "$(defaults read com.apple.dock "wvous-${corner}-corner" 2>/dev/null)" == "0" ]] &&
+      [[ "$(defaults read com.apple.dock "wvous-${corner}-modifier" 2>/dev/null)" == "0" ]] || return 1
+  done
+
+  # defaults read emits numeric dictionary values as strings in its text output.
+  defaults -currentHost read -g com.apple.keyboard.modifiermapping.0-0-0 2>/dev/null |
+    plutil -convert json -o - - 2>/dev/null |
+    jq -e 'length == 1 and
+      (.[0].HIDKeyboardModifierMappingSrc | tonumber) == 30064771129 and
+      (.[0].HIDKeyboardModifierMappingDst | tonumber) == 30064771300' >/dev/null
 }
 
 has_expected_macos_dock() {

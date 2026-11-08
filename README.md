@@ -1,82 +1,40 @@
 # dotfiles
 
-Personal macOS configuration for Git, Fish, Ghostty, Zed, and agent skills.
+Personal macOS configuration, installed from this checkout.
 
-## Install
+## Use
 
-Clone the repository, inspect the intended changes, and install:
+With [Homebrew](https://brew.sh) installed, run from the repository root:
 
 ```console
 ./install.sh --dry-run
 ./install.sh
+./install.sh --check
 ```
 
-The installer checks every managed target before changing anything. If an
-existing file or an unexpected symlink would be replaced, installation stops
-and reports all conflicts. It never deletes, moves, or overwrites them.
+See `./install.sh --help` for flags. The [installer](install.sh) checks managed
+file targets for conflicts before making changes; existing files and unrelated
+symlinks must be resolved manually.
 
-Use `--skip-brew` to install configuration without satisfying the `Brewfile`,
-or `--skip-macos` to leave managed macOS preferences and the login shell
-unchanged.
-Use `--check` to verify an existing installation.
+## Architecture
 
-## macOS preferences
-
-The installer applies the macOS preferences in `macos/defaults.sh` on macOS.
-See that script for the managed settings. Use `./install.sh --skip-macos` to
-omit these settings, including while testing the installer.
-
-After Homebrew installs the Brewfile, the script uses `dockutil` to replace the
-pinned Dock items with Zed, Ghostty, Google Chrome, Slack, and Spotify, in that
-order, followed by Downloads. Finder and Trash remain implicit. Recent apps are
-hidden; running apps can still appear while open. The complete layout is built
-in a temporary preferences file, imported only after success, and followed by
-one Dock restart. Each install restores this layout. With `--skip-brew`,
-`dockutil` and all five apps must already be installed.
-
-The [Raycast hotkey reference](raycast/README.md) documents application and
-window-management shortcuts. These are managed in Raycast and are not applied
-by the installer.
-
-The installer also registers the Homebrew-installed Fish executable in
-`/etc/shells` and selects it as the current user's macOS login shell. Registering
-Fish may prompt for an administrator password. Ghostty inherits this login shell
-instead of naming Fish in its own configuration.
-
-Log out and back in, or restart, if macOS does not immediately recognize a
-login-shell or preference change.
-
-Git credentials and Fish secrets remain machine-local. Authenticate GitHub
-separately with:
-
-```console
-gh auth login
-gh auth setup-git
-```
-
-The included `git/config` sets the commit name and GitHub noreply email address.
-It also enables `user.useConfigOnly` so Git cannot silently guess an identity
-when none is configured. Authentication credentials remain machine-local.
-
-Store Fish secrets in `~/.config/fish/secrets.fish`.
-
-## Managed files
-
-Files under `fish/`, `ghostty/`, and `zed/` mirror their respective
-configuration directories and are discovered automatically. Each directory
-under `skills/` is linked into both supported agent skill directories. Adding a
-Fish function, application setting, or personal skill does not require
-registering individual files with the installer.
-
-`macos/.hushlogin` is linked to the home directory on macOS to suppress login
-banners, including the "Last login" message shown when opening a terminal.
+- **Linked configuration:** Files under [fish/](fish/), [ghostty/](ghostty/), and
+  [zed/](zed/) are discovered recursively and symlinked into application
+  configuration directories. Each directory under [skills/](skills/) is linked
+  into the agent skill directories. Target paths live in [install.sh](install.sh).
+  Add files within these trees without registering them individually.
+- **Git include:** [git/config](git/config) is included from the user's global
+  Git configuration, preserving machine-local settings and credentials.
+- **Applied state:** [Brewfile](Brewfile) defines packages and applications;
+  [macos/defaults.sh](macos/defaults.sh) defines native preferences and the Dock
+  layout. Rerun the installer after changing these sources. On macOS, the
+  installer also registers and selects Fish as the login shell; terminals
+  inherit it. A logout may be needed for shell or preference changes.
+- **Reference only:** [Raycast shortcuts](raycast/README.md) are maintained in
+  Raycast and are not applied by the installer.
 
 ## Development
 
-```console
-just format
-just ci
-```
-
-`just ci` runs the same formatting, linting, and installation checks used by
-GitHub Actions.
+Run `just format` to format and `just ci` to validate. The [justfile](justfile)
+defines the checks, [tests/install.sh](tests/install.sh) exercises installation,
+and [CI](.github/workflows/ci.yml) runs the same validation.
