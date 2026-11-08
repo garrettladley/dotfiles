@@ -162,7 +162,18 @@ has_expected_macos_defaults() {
   [[ "$(defaults read com.apple.screencapture target 2>/dev/null)" == "clipboard" ]] &&
     [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == "10" ]] &&
     [[ "$(defaults read -g KeyRepeat 2>/dev/null)" == "1" ]] &&
-    [[ "$(defaults read -g com.apple.trackpad.scaling 2>/dev/null)" == "3" ]]
+    [[ "$(defaults read -g com.apple.trackpad.scaling 2>/dev/null)" == "3" ]] &&
+    [[ "$(defaults read com.apple.dock show-recents 2>/dev/null)" == "0" ]]
+}
+
+has_expected_macos_dock() {
+  local dock_items
+  local expected_items
+
+  command -v dockutil >/dev/null 2>&1 || return 1
+  dock_items="$(dockutil --list | awk -F '\t' '$3 != "recentApps" { print $1 }')" || return 1
+  expected_items="$(printf '%s\n' Zed Ghostty 'Google Chrome' Slack Spotify Downloads)"
+  [[ "$dock_items" == "$expected_items" ]]
 }
 
 preflight_links() {
@@ -227,6 +238,11 @@ check_installation() {
     failed=true
   fi
 
+  if [[ "$skip_macos" == false ]] && is_macos && ! has_expected_macos_dock; then
+    printf 'check: managed Dock layout does not match (dockutil is required)\n' >&2
+    failed=true
+  fi
+
   if [[ "$skip_macos" == false ]] && is_macos &&
     ! has_expected_macos_login_shell; then
     printf 'check: Fish is not configured as the macOS login shell\n' >&2
@@ -271,6 +287,7 @@ if [[ "$dry_run" == true ]]; then
   if [[ "$skip_macos" == false ]] && is_macos; then
     printf 'macOS login shell: register and select Homebrew Fish\n'
     printf 'macOS defaults: %s\n' "$macos_defaults"
+    printf 'macOS Dock: replace pinned items with Zed, Ghostty, Google Chrome, Slack, Spotify, Downloads; disable recents\n'
   fi
   exit
 fi
