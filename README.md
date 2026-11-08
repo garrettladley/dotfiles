@@ -54,12 +54,9 @@ gh auth login
 gh auth setup-git
 ```
 
-Configure the appropriate Git identity on each machine:
-
-```console
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
+The included `git/config` sets the commit name and GitHub noreply email address.
+It also enables `user.useConfigOnly` so Git cannot silently guess an identity
+when none is configured. Authentication credentials remain machine-local.
 
 Store Fish secrets in `~/.config/fish/secrets.fish`.
 
