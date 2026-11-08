@@ -26,6 +26,18 @@ The installer applies the macOS preferences in `macos/defaults.sh` on macOS.
 See that script for the managed settings. Use `./install.sh --skip-macos` to
 omit these settings, including while testing the installer.
 
+After Homebrew installs the Brewfile, the script uses `dockutil` to replace the
+pinned Dock items with Zed, Ghostty, Google Chrome, Slack, and Spotify, in that
+order, followed by Downloads. Finder and Trash remain implicit. Recent apps are
+hidden; running apps can still appear while open. The complete layout is built
+in a temporary preferences file, imported only after success, and followed by
+one Dock restart. Each install restores this layout. With `--skip-brew`,
+`dockutil` and all five apps must already be installed.
+
+The [Raycast hotkey reference](raycast/README.md) documents application and
+window-management shortcuts. These are managed in Raycast and are not applied
+by the installer.
+
 The installer also registers the Homebrew-installed Fish executable in
 `/etc/shells` and selects it as the current user's macOS login shell. Registering
 Fish may prompt for an administrator password. Ghostty inherits this login shell
@@ -42,12 +54,9 @@ gh auth login
 gh auth setup-git
 ```
 
-Configure the appropriate Git identity on each machine:
-
-```console
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
+The included `git/config` sets the commit name and GitHub noreply email address.
+It also enables `user.useConfigOnly` so Git cannot silently guess an identity
+when none is configured. Authentication credentials remain machine-local.
 
 Store Fish secrets in `~/.config/fish/secrets.fish`.
 

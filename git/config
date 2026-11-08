@@ -1,3 +1,7 @@
+[user]
+	name = Garrett Ladley
+	email = 92384606+garrettladley@users.noreply.github.com
+	useConfigOnly = true
 [core]
 	pager = delta
 [interactive]

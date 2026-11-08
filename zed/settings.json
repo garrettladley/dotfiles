@@ -92,6 +92,7 @@
   },
   "show_edit_predictions": true,
   "telemetry": {
+    "diagnostics": false,
     "metrics": false,
   },
   "ui_font_size": 16,
