@@ -1,5 +1,7 @@
 brew "bat"
 brew "biome"
+cask "chatgpt"
+cask "claude-code"
 cask "codex"
 brew "difftastic"
 brew "dockutil"
