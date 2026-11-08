@@ -1,6 +1,6 @@
 function fish_prompt
-    set -l cwd_abbr "$PWD"
-    set -l project_roots "$HOME/Desktop/code" "$HOME/desktop/code" "$HOME/dev"
+    set -l cwd_abbr (prompt_pwd --dir-length=0)
+    set -l project_roots "$HOME/code" "$HOME/Desktop/code" "$HOME/desktop/code" "$HOME/dev"
 
     if set -q FISH_PROMPT_PROJECT_ROOTS
         set -a project_roots $FISH_PROMPT_PROJECT_ROOTS
@@ -23,7 +23,7 @@ function fish_prompt
             git symbolic-ref --short HEAD 2>/dev/null
             or git rev-parse --short HEAD 2>/dev/null
         )
-        set -l git_status (git status --porcelain -uno 2>/dev/null)
+        set -l git_status (git status --porcelain --untracked-files=normal 2>/dev/null)
 
         if test -n "$git_status"
             echo -n (set_color yellow)"($git_branch) "(set_color normal)
